@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>命理服务演示站</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>命理服务演示站</h1>
+      <p class="muted">前端可部署到 GitHub Pages，后端 API 可部署到 Railway。</p>
+
+      <section class="grid">
+        <form id="registerForm" class="panel">
+          <h2>注册</h2>
+          <input id="regName" placeholder="昵称" required />
+          <input id="regEmail" type="email" placeholder="邮箱" required />
+          <input id="regPassword" type="password" placeholder="密码（至少6位）" required />
+          <button type="submit">注册并登录</button>
+        </form>
+
+        <form id="loginForm" class="panel">
+          <h2>登录</h2>
+          <input id="loginEmail" type="email" placeholder="邮箱" required />
+          <input id="loginPassword" type="password" placeholder="密码" required />
+          <button type="submit">登录</button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <h2>当前用户</h2>
+        <pre id="meInfo">未登录</pre>
+      </section>
+
+      <form id="orderForm" class="panel">
+        <h2>创建订单</h2>
+        <div class="row">
+          <select id="fortuneType">
+            <option value="八字">八字</option>
+            <option value="塔罗">塔罗</option>
+            <option value="事业">事业</option>
+            <option value="姻缘">姻缘</option>
+          </select>
+          <input id="amountCny" type="number" min="1" step="0.01" value="19.9" />
+        </div>
+        <textarea id="question" rows="4" placeholder="请输入你的问题..." required></textarea>
+        <button type="submit">提交订单</button>
+      </form>
+
+      <section class="panel">
+        <div class="row space">
+          <h2>我的订单</h2>
+          <button id="refreshOrders" type="button">刷新</button>
+        </div>
+        <pre id="ordersInfo">暂无数据</pre>
+      </section>
+    </main>
+
+    <script src="./main.js"></script>
+  </body>
+</html>
