@@ -8,6 +8,7 @@
 ## 项目文档
 
 - 进度管理：`PROGRESS.md`
+- 工作规范：`WORKFLOW_RULES.md`
 
 ## 1) 启动后端
 
@@ -59,6 +60,19 @@ location.reload();
    - `DB_NAME=...`
    - `ALLOWED_ORIGIN=https://<your-github-pages-domain>`
 4. 启动命令用 `npm start`
+
+## 5) CI/CD（按规范）
+
+已内置 GitHub Actions：
+- `.github/workflows/ci.yml`：`main/develop` push 或 PR 时自动做后端检查
+- `.github/workflows/deploy-railway.yml`：
+  - `develop` -> Railway staging
+  - `main` -> Railway production
+
+你需要在 GitHub 仓库 `Settings -> Secrets and variables -> Actions` 添加：
+- `RAILWAY_TOKEN`
+- `RAILWAY_STAGING_SERVICE`
+- `RAILWAY_PROD_SERVICE`
 
 ## API 概览
 

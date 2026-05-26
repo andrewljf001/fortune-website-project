@@ -13,6 +13,9 @@
 | Repository initialized | Done | Public repo created and code pushed |
 | Backend MVP (Auth + Orders API) | Done | `backend/src/server.js` |
 | Frontend MVP page | Done | `frontend/index.html` |
+| Workflow rules document | Done | `WORKFLOW_RULES.md` |
+| Branch strategy (`develop`/`main`) | In Progress | Creating and pushing `develop` branch |
+| CI/CD baseline workflows | Done | GitHub Actions added |
 | GitHub Pages setup | Todo | Configure Pages source to `/frontend` |
 | Railway backend deployment | Todo | Create service, set variables, verify `/api/health` |
 | End-to-end test | Todo | Register -> Login -> Create order -> List orders |
@@ -24,6 +27,7 @@
 
 - [ ] Enable GitHub Pages for `frontend`
 - [ ] Deploy `backend` on Railway
+- [ ] Add GitHub Actions secrets for Railway deployment
 - [ ] Configure `ALLOWED_ORIGIN` to GitHub Pages domain
 - [ ] Run full flow test and record results
 - [ ] Add admin order management API/page (next iteration)
