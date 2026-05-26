@@ -5,6 +5,10 @@
 - `backend/`：Node.js + Express API，可部署到 Railway
 - 数据库：MySQL/MariaDB（本地、Railway 或 VPS 都可）
 
+## 项目文档
+
+- 进度管理：`PROGRESS.md`
+
 ## 1) 启动后端
 
 ```bash
