@@ -8,8 +8,22 @@
   </head>
   <body>
     <main class="container">
-      <h1>命理服务演示站</h1>
-      <p class="muted">前端可部署到 GitHub Pages，后端 API 可部署到 Railway。</p>
+      <header class="hero">
+        <h1>命理服务演示站</h1>
+        <p class="muted">在线演示：注册、登录、提交订单、查看订单。</p>
+      </header>
+
+      <section class="panel">
+        <div class="row">
+          <input id="apiBaseInput" placeholder="后端 API 地址，例如 https://fortune-backend-staging.onrender.com" />
+          <button id="saveApiBase" type="button">保存 API 地址</button>
+        </div>
+        <p class="hint">当前 API：<span id="apiBaseText"></span></p>
+      </section>
+
+      <section class="panel status-panel">
+        <div id="statusText">准备就绪</div>
+      </section>
 
       <section class="grid">
         <form id="registerForm" class="panel">
@@ -30,7 +44,7 @@
 
       <section class="panel">
         <h2>当前用户</h2>
-        <pre id="meInfo">未登录</pre>
+        <div id="meInfo" class="card-list">未登录</div>
       </section>
 
       <form id="orderForm" class="panel">
@@ -53,7 +67,7 @@
           <h2>我的订单</h2>
           <button id="refreshOrders" type="button">刷新</button>
         </div>
-        <pre id="ordersInfo">暂无数据</pre>
+        <div id="ordersInfo" class="card-list">暂无数据</div>
       </section>
     </main>
 
