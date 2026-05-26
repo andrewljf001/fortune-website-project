@@ -29,19 +29,15 @@ app.post("/api/auth/register", async (req, res) => {
 
   try {
     const passwordHash = await bcrypt.hash(password, 10);
-    const [insertResult] = await pool.query(
-      "INSERT INTO users (email, password_hash, display_name) VALUES (?, ?, ?)",
+    const insertResult = await pool.query(
+      "INSERT INTO users (email, password_hash, display_name) VALUES ($1, $2, $3) RETURNING id, email, display_name",
       [email, passwordHash, displayName]
     );
-    const userId = insertResult.insertId;
-    const [rows] = await pool.query(
-      "SELECT id, email, display_name FROM users WHERE id = ?",
-      [userId]
-    );
-    const token = signToken(rows[0]);
-    return res.status(201).json({ token, user: rows[0] });
+    const user = insertResult.rows[0];
+    const token = signToken(user);
+    return res.status(201).json({ token, user });
   } catch (err) {
-    if (err?.code === "ER_DUP_ENTRY") {
+    if (err?.code === "23505") {
       return res.status(409).json({ error: "Email already exists" });
     }
     return res.status(500).json({ error: "Failed to register" });
@@ -55,11 +51,11 @@ app.post("/api/auth/login", async (req, res) => {
   }
 
   try {
-    const [rows] = await pool.query(
-      "SELECT id, email, display_name, password_hash FROM users WHERE email = ? LIMIT 1",
+    const result = await pool.query(
+      "SELECT id, email, display_name, password_hash FROM users WHERE email = $1 LIMIT 1",
       [email]
     );
-    const user = rows[0];
+    const user = result.rows[0];
     if (!user) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
@@ -81,11 +77,11 @@ app.post("/api/auth/login", async (req, res) => {
 
 app.get("/api/me", authRequired, async (req, res) => {
   try {
-    const [rows] = await pool.query(
-      "SELECT id, email, display_name, created_at FROM users WHERE id = ?",
+    const result = await pool.query(
+      "SELECT id, email, display_name, created_at FROM users WHERE id = $1",
       [req.user.userId]
     );
-    return res.json({ user: rows[0] || null });
+    return res.json({ user: result.rows[0] || null });
   } catch (_err) {
     return res.status(500).json({ error: "Failed to get user info" });
   }
@@ -102,12 +98,11 @@ app.post("/api/orders", authRequired, async (req, res) => {
   }
 
   try {
-    const [insertResult] = await pool.query(
-      "INSERT INTO orders (user_id, fortune_type, question, amount_cny) VALUES (?, ?, ?, ?)",
+    const insertResult = await pool.query(
+      "INSERT INTO orders (user_id, fortune_type, question, amount_cny) VALUES ($1, $2, $3, $4) RETURNING *",
       [req.user.userId, fortuneType, question, amount.toFixed(2)]
     );
-    const [rows] = await pool.query("SELECT * FROM orders WHERE id = ?", [insertResult.insertId]);
-    return res.status(201).json({ order: rows[0] });
+    return res.status(201).json({ order: insertResult.rows[0] });
   } catch (_err) {
     return res.status(500).json({ error: "Failed to create order" });
   }
@@ -115,11 +110,11 @@ app.post("/api/orders", authRequired, async (req, res) => {
 
 app.get("/api/orders", authRequired, async (req, res) => {
   try {
-    const [rows] = await pool.query(
-      "SELECT id, fortune_type, question, amount_cny, status, result_text, created_at, updated_at FROM orders WHERE user_id = ? ORDER BY id DESC",
+    const result = await pool.query(
+      "SELECT id, fortune_type, question, amount_cny, status, result_text, created_at, updated_at FROM orders WHERE user_id = $1 ORDER BY id DESC",
       [req.user.userId]
     );
-    return res.json({ orders: rows });
+    return res.json({ orders: result.rows });
   } catch (_err) {
     return res.status(500).json({ error: "Failed to get orders" });
   }
